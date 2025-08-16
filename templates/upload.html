@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Resumes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Poppins', sans-serif; 
+      margin: 0; 
+      color: #fff; 
+      overflow-x: hidden;
+      position: relative;
+      background: #0d1117;
+    }
+
+    a { text-decoration: none; }
+    img { max-width: 100%; }
+
+    /* Navbar */
+    nav { position: fixed; width: 100%; top: 0; z-index: 999; background: rgba(0,0,0,0.7); transition: 0.3s; }
+    nav.scrolled { background: rgba(0,0,0,0.95); }
+    nav .container { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+    nav .logo { display: flex; align-items: center; font-weight: 700; font-size: 1.5rem; color: #00e0ff; }
+    nav .logo img { height: 40px; margin-right: 10px; }
+    nav .nav-links a { color: #fff; margin-left: 25px; font-weight: 500; transition: 0.3s; }
+    nav .nav-links a:hover { color: #00e0ff; }
+
+    /* Header */
+    header { height: 30vh; display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 80px; animation: fadeInDown 1.2s ease forwards; }
+    h2 { text-align: center; margin: 40px 0 30px 0; color: #00e0ff; text-shadow: 0 0 10px #00e0ff; }
+
+    /* Form */
+    .form-container { 
+      max-width: 700px; 
+      margin: 40px auto; 
+      background: rgba(255,255,255,0.05); 
+      padding: 40px; 
+      border-radius: 20px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+      position: relative; 
+      overflow: hidden; 
+    }
+
+    label { font-weight: 500; color: #c9d1d9; font-size: 1.1rem; }
+    textarea, input[type=file] { background: #161b22; color: #fff; border: 1px solid #30363d; border-radius: 8px; }
+    textarea:focus, input:focus { outline: none; border-color: #00ff99; box-shadow: 0 0 10px #00ff99; transition: all 0.3s ease; }
+
+    button { 
+      background: linear-gradient(45deg, #00e0ff, #00ff99); 
+      border: none; font-weight: 600; padding: 12px 30px; 
+      transition: transform 0.3s, box-shadow 0.3s; 
+      position: relative; overflow: hidden; 
+      color: #0d1117;
+    }
+    button:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(0,255,153,0.5); }
+
+    #loader { display: none; margin-top: 20px; text-align: center; color: #00ff99; }
+
+    /* Animations */
+    @keyframes fadeInDown { 0% { opacity: 0; transform: translateY(-20px);} 100% {opacity:1; transform: translateY(0);} }
+
+    /* Animated background canvas */
+    #bgCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Background -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Navbar -->
+  <nav id="navbar">
+    <div class="container">
+      <div class="logo">
+        <img src="https://img.icons8.com/ios-filled/50/00e0ff/artificial-intelligence.png" alt="AI Logo">
+        <span>AI Resume</span>
+      </div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="">Upload</a>
+        <a href="#footer">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header>
+    <h2>Upload Resumes for AI Screening</h2>
+  </header>
+
+  <!-- Form Section -->
+  <section id="upload-section" class="form-container">
+    <form id="resumeForm" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label>Job Description</label>
+        <textarea name="job_description" class="form-control" rows="6" placeholder="Paste your job description here..." required></textarea>
+      </div>
+      <div class="mb-3">
+        <label>Upload Resumes (PDF / TXT)</label>
+        <input type="file" name="resumes" class="form-control" multiple required>
+      </div>
+      <button type="submit" class="btn w-100">Analyze Resumes</button>
+    </form>
+
+    <div id="loader">
+      <p>Analyzing resumes... Please wait.</p>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Form submit handling
+    const form = document.getElementById('resumeForm');
+    const loader = document.getElementById('loader');
+    const progressBar = loader.querySelector('.progress-bar');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loader.style.display = 'block';
+      progressBar.style.width = '30%';
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        progressBar.style.width = '80%';
+
+        if (!response.ok) {
+          alert("Error analyzing resumes");
+          loader.style.display = 'none';
+          return;
+        }
+
+        const html = await response.text();
+        document.open();
+        document.write(html);
+        document.close();
+      } catch (err) {
+        alert("Something went wrong: " + err.message);
+        loader.style.display = 'none';
+      }
+    });
+
+    // Animated background canvas
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    });
+
+    const lines = [];
+    for(let i=0;i<60;i++){
+      lines.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        dx: (Math.random()-0.5)*0.3,
+        dy: (Math.random()-0.5)*0.3,
+        length: 50 + Math.random()*100,
+        angle: Math.random()*360
+      });
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      lines.forEach(line => {
+        ctx.save();
+        ctx.translate(line.x,line.y);
+        ctx.rotate(line.angle*Math.PI/180);
+        ctx.strokeStyle = 'rgba(0,224,255,0.15)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-line.length/2,0);
+        ctx.lineTo(line.length/2,0);
+        ctx.stroke();
+        ctx.restore();
+
+        line.x += line.dx;
+        line.y += line.dy;
+        line.angle += 0.1;
+
+        if(line.x<0 || line.x>w) line.dx*=-1;
+        if(line.y<0 || line.y>h) line.dy*=-1;
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
