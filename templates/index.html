@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Resume Screening</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global */
+    body { font-family: 'Poppins', sans-serif; margin: 0; background: #0d1117; color: #fff; scroll-behavior: smooth; }
+    a { text-decoration: none; }
+    img { max-width: 100%; }
+
+    /* Navbar */
+    nav { position: fixed; width: 100%; top: 0; z-index: 999; background: rgba(0,0,0,0.7); transition: 0.3s; }
+    nav.scrolled { background: rgba(0,0,0,0.95); }
+    nav .container { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+    nav .logo { display: flex; align-items: center; font-weight: 700; font-size: 1.5rem; color: #00e0ff; }
+    nav .logo img { height: 40px; margin-right: 10px; }
+    nav .nav-links a { color: #fff; margin-left: 25px; font-weight: 500; transition: 0.3s; }
+    nav .nav-links a:hover { color: #00e0ff; }
+
+    /* Header */
+    header { height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); padding-top: 60px; }
+    header h1 { font-size: 3rem; color: #00e0ff; margin-bottom: 20px; animation: fadeInDown 1s ease forwards; }
+    header p { font-size: 1.2rem; max-width: 700px; margin-bottom: 40px; color: #c9d1d9; animation: fadeInUp 1s ease forwards; }
+    .btn-primary { background-color: #00e0ff; border: none; padding: 12px 30px; font-weight: 600; font-size: 1.1rem; transition: 0.3s; }
+    .btn-primary:hover { background-color: #00c1d4; }
+
+    /* Features */
+    section { padding: 100px 20px; }
+    .feature-card { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; text-align: center; transition: 0.3s; opacity: 0; transform: translateY(20px); }
+    .feature-card.visible { opacity: 1; transform: translateY(0); }
+    .feature-card h3 { margin-bottom: 15px; color: #00e0ff; }
+    .feature-card p { color: #c9d1d9; }
+
+    /* Footer */
+    footer { text-align: center; padding: 30px; background: #161b22; color: #888; }
+
+    /* Animations */
+    @keyframes fadeInDown { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav id="navbar">
+  <div class="container">
+    <div class="logo">
+<img src="https://img.icons8.com/ios-filled/50/00e0ff/artificial-intelligence.png" alt="AI Logo">      AI Resume
+    </div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="/upload">Upload</a>
+      <a href="#footer">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Header -->
+<header style="position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; background: #0d1117; overflow: hidden;">
+  <!-- Animated background lines -->
+  <div class="animated-lines"></div>
+
+  <h1 class="glow-text">AI Resume Screening</h1>
+  <p class="fade-in-text">Streamline your hiring process with AI-powered resume analysis. Upload resumes, compare with job descriptions, and instantly identify top candidates.</p>
+  <a href="/upload" class="btn btn-primary animated-btn">Get Started</a>
+</header>
+
+<style>
+  /* Glowing header text */
+  .glow-text {
+    font-size: 3rem;
+    color: #00e0ff;
+    text-shadow: 0 0 5px #00e0ff, 0 0 10px #00e0ff, 0 0 20px #00e0ff;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    0% { text-shadow: 0 0 5px #00e0ff, 0 0 10px #00e0ff, 0 0 20px #00e0ff; }
+    100% { text-shadow: 0 0 20px #00ff99, 0 0 40px #00ff99, 0 0 60px #00ff99; }
+  }
+
+  /* Fade-in paragraph */
+  .fade-in-text {
+    font-size: 1.2rem;
+    max-width: 700px;
+    color: #c9d1d9;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeIn 2s ease forwards;
+    animation-delay: 0.5s;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* Animated button hover */
+  .animated-btn {
+    background: linear-gradient(45deg, #00e0ff, #00ff99);
+    border: none;
+    padding: 12px 30px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #0d1117;
+    transition: 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .animated-btn::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255,255,255,0.2);
+    transition: 0.4s;
+  }
+
+  .animated-btn:hover::before {
+    width: 100%;
+  }
+
+  .animated-btn:hover {
+    transform: scale(1.05);
+  }
+
+  /* Animated background lines */
+  .animated-lines {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(0, 224, 255, 0.1),
+      rgba(0, 224, 255, 0.1) 2px,
+      transparent 2px,
+      transparent 20px
+    );
+    animation: moveLines 10s linear infinite;
+    top: -50%;
+    left: -50%;
+    z-index: 0;
+  }
+
+  @keyframes moveLines {
+    0% { transform: rotate(0deg) translate(0, 0); }
+    100% { transform: rotate(360deg) translate(50px, 50px); }
+  }
+
+  header h1, header p, header a { position: relative; z-index: 1; }
+</style>
+
+<!-- Features Section -->
+<section class="container" id="features" style="padding: 100px 20px;">
+  <h2 style="text-align:center; color:#00e0ff; margin-bottom:50px;">Features</h2>
+  <div class="row g-4">
+    <!-- Feature Card 1 -->
+    <div class="col-md-4">
+      <div class="feature-card bordered-card">
+        <h3>Upload Resumes</h3>
+        <p>Upload multiple resumes in PDF or text format with a single click. Our AI reads and analyzes all documents efficiently.</p>
+        <p><strong>Supported formats:</strong> PDF, TXT</p>
+      </div>
+    </div>
+
+    <!-- Feature Card 2 -->
+    <div class="col-md-4">
+      <div class="feature-card bordered-card">
+        <h3>Smart Matching</h3>
+        <p>Compare resumes against your job description using Gemini AI and get instant match scores, strengths, and gaps.</p>
+        <p><strong>AI Insights:</strong> Strengths, Gaps, Skills Match</p>
+      </div>
+    </div>
+
+    <!-- Feature Card 3 -->
+    <div class="col-md-4">
+      <div class="feature-card bordered-card">
+        <h3>Easy Results</h3>
+        <p>See selected candidates, their match percentage, and detailed insights in a modern dashboard for faster decisions.</p>
+        <p><strong>Verdict:</strong> Selected / Not Selected instantly</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .feature-card {
+    position: relative;
+    background: rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+  }
+
+  .feature-card h3 { margin-bottom: 15px; color: #00e0ff; }
+  .feature-card p { color: #c9d1d9; font-size: 1rem; line-height: 1.6; }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  }
+
+  /* Rotating Border Animation */
+  .bordered-card::before,
+  .bordered-card::after {
+    content: '';
+    position: absolute;
+    border: 2px solid #00e0ff;
+    width: 120%;
+    height: 120%;
+    top: -10%;
+    left: -10%;
+    border-radius: 15px;
+    animation: rotateBorder 6s linear infinite;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .bordered-card::after {
+    border-color: #00ff99;
+    animation-direction: reverse;
+  }
+
+  @keyframes rotateBorder {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+
+<!-- Footer -->
+<footer id="footer">
+  &copy; 2025 AI Resume Screening. All rights reserved.
+</footer>
+
+<!-- Scripts -->
+<script>
+  // Navbar scroll effect
+  window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('navbar');
+    if(window.scrollY > 50) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  });
+
+  // Animate features on scroll
+  const featureCards = document.querySelectorAll('.feature-card');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  featureCards.forEach(card => observer.observe(card));
+</script>
+
+</body>
+</html>
